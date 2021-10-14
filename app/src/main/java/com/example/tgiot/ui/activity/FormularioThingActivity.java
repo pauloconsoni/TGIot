@@ -1,10 +1,9 @@
 package com.example.tgiot.ui.activity;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -25,20 +24,24 @@ public class FormularioThingActivity extends AppCompatActivity {
         final EditText campoUrl = findViewById(R.id.activity_formulario_thing_URL);
 
         Button botaoSalvar = findViewById(R.id.activity_formulario_thing_botao_salvar);
-        botaoSalvar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String nome = campoNome.getText().toString();
-                String url = campoUrl.getText().toString();
-
-                Thing thing = new Thing(nome,url);
-
-                dao.salva(thing);
-
-                startActivity(new Intent(FormularioThingActivity.this,ListaThingsActivity.class));
-
-                finish();
-            }
+        botaoSalvar.setOnClickListener(view -> {
+            Thing thing = criaThing(campoNome, campoUrl);
+            salvar(dao, thing);
         });
+    }
+
+    private void salvar(ThingDAO dao, Thing thing) {
+        dao.salva(thing);
+
+        finish();
+    }
+
+    @NonNull
+    private Thing criaThing(EditText campoNome, EditText campoUrl) {
+        String nome = campoNome.getText().toString();
+        String url = campoUrl.getText().toString();
+
+        Thing thing = new Thing(nome, url);
+        return thing;
     }
 }
