@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.tgiot">
-
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <application
+        android:usesCleartextTraffic="true"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -10,6 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TGIot">
         <activity android:name=".ui.activity.FormularioThingActivity"/>
+        <activity android:name=".ui.activity.MonitorActivity"/>
         <activity
             android:name=".ui.activity.ListaThingsActivity"
             android:exported="true">
