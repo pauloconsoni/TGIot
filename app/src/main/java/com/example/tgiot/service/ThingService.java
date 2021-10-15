@@ -10,5 +10,5 @@ import retrofit2.http.GET;
 public interface ThingService {
 
     @GET("iottg")
-    Call<List<RequestResponseTotal>> buscaDados();
+    Call<RequestResponseTotal> buscaDados();
 }

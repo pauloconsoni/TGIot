@@ -2,6 +2,7 @@ package com.example.tgiot.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -23,6 +24,8 @@ import retrofit2.Call;
 import retrofit2.Response;
 
 public class MonitorActivity extends AppCompatActivity {
+    Intent dados;
+    Thing thing;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -30,40 +33,57 @@ public class MonitorActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_monitor);
 
-        Intent dados = getIntent();
-        Thing thing = (Thing) dados.getSerializableExtra("Thing");
+        dados = getIntent();
+        thing = (Thing) dados.getSerializableExtra("Thing");
 
         setTitle(thing.getNome());
-
-        TextView textFluxo = findViewById(R.id.activity_monitor_text_fluxo);
-        TextView textTemperatura = findViewById(R.id.activity_monitor_text_temperatura);
-
-        ThingService service = new ThingRetrofit().getThingService();
-        Call<List<RequestResponseTotal>> dadosThingCall = service.buscaDados();
-
-        new BaseAsyncTask2<>(()->{
-            try {
-                Response<List<RequestResponseTotal>> resposta = dadosThingCall.execute();
-                DeviceData dadosNovos = resposta.body().get(0).getDeviceData();
-                String teste = resposta.body().toString();
-                return dadosNovos;
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return null;
-        }, dadosNovos ->{
-            if (dadosNovos!=null){
-                DeviceData response = (DeviceData) dadosNovos;
-                DadosThing dadosThing = new DadosThing();
-                dadosThing.setFluxo(response.getFlow());
-                dadosThing.setTemperatura(response.getTempe());
-
-                thing.updateDadosThing(dadosThing);
-            }
-        }).execute();
-
-        textFluxo.setText(thing.getDadosThing().getFluxo());
-        textTemperatura.setText(thing.getDadosThing().getTemperatura());
-
     }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        handler.removeCallbacks(getResponceAfterInterval);
+        handler.post(getResponceAfterInterval);
+    }
+
+    private final Handler handler = new Handler();
+    private Runnable getResponceAfterInterval = new Runnable() {
+
+        public void run() {
+
+            try
+            {
+                TextView textFluxo = findViewById(R.id.activity_monitor_text_fluxo);
+                TextView textTemperatura = findViewById(R.id.activity_monitor_text_temperatura);
+                ThingService service = new ThingRetrofit().getThingService();
+                Call<RequestResponseTotal> dadosThingCall = service.buscaDados();
+                new BaseAsyncTask2<>(()->{
+                    try {
+                        Response<RequestResponseTotal> resposta = dadosThingCall.execute();
+                        RequestResponseTotal dadosNovos = resposta.body();
+                        return dadosNovos;
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    return null;
+                }, dadosNovos ->{
+                    if (dadosNovos!=null){
+                        DadosThing dadosThing = new DadosThing();
+                        dadosThing.setFluxo(dadosNovos.getFlow());
+                        dadosThing.setTemperatura(dadosNovos.getTemp());
+
+                        thing.updateDadosThing(dadosThing);
+                    }
+                }).execute();
+                textFluxo.setText(thing.getDadosThing().getFluxo());
+                textTemperatura.setText(thing.getDadosThing().getTemperatura());
+
+            } catch (Exception e) {
+
+            }
+
+            handler.postDelayed(this, 1000);
+
+        }
+    };
 }

@@ -32,7 +32,7 @@ public class Thing implements Serializable {
 
     public void updateDadosThing(DadosThing dadosThing){
         this.dadosThing.setFluxo(dadosThing.getFluxo());
-        this.dadosThing.setFluxo(dadosThing.getTemperatura());
+        this.dadosThing.setTemperatura(dadosThing.getTemperatura());
     }
 
 
