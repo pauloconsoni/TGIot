@@ -10,7 +10,7 @@ public class ThingRetrofit {
     private final ThingService thingService;
 
     public ThingRetrofit(){
-        Retrofit retrofit = new Retrofit.Builder().baseUrl("http://n0726uqgmj.execute-api.sa-east-1.amazonaws.com/prod/").addConverterFactory(GsonConverterFactory.create()).build();
+        Retrofit retrofit = new Retrofit.Builder().baseUrl("http://n0726uqgmj.execute-api.sa-east-1.amazonaws.com/").addConverterFactory(GsonConverterFactory.create()).build();
 
         thingService = retrofit.create(ThingService.class);
     }

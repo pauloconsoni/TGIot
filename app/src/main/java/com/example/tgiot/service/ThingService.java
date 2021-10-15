@@ -2,13 +2,12 @@ package com.example.tgiot.service;
 
 import com.example.tgiot.model.RequestResponseTotal;
 
-import java.util.List;
-
 import retrofit2.Call;
 import retrofit2.http.GET;
+import retrofit2.http.Path;
 
 public interface ThingService {
 
-    @GET("iottg")
-    Call<RequestResponseTotal> buscaDados();
+    @GET("prod/{url}")
+    Call<RequestResponseTotal> buscaDados(@Path("url") String url);
 }

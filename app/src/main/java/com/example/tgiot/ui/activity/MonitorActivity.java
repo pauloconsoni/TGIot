@@ -56,7 +56,8 @@ public class MonitorActivity extends AppCompatActivity {
                 TextView textFluxo = findViewById(R.id.activity_monitor_text_fluxo);
                 TextView textTemperatura = findViewById(R.id.activity_monitor_text_temperatura);
                 ThingService service = new ThingRetrofit().getThingService();
-                Call<RequestResponseTotal> dadosThingCall = service.buscaDados();
+
+                Call<RequestResponseTotal> dadosThingCall = service.buscaDados(thing.getUrl());
                 new BaseAsyncTask2<>(()->{
                     try {
                         Response<RequestResponseTotal> resposta = dadosThingCall.execute();
