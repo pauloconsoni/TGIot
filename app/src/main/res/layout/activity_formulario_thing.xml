@@ -17,7 +17,7 @@
         android:id="@+id/activity_formulario_thing_URL"
         android:layout_width="match_parent"
         android:layout_margin="8dp"
-        android:hint="URL"
+        android:hint="Thing ID"
         android:inputType="textUri"
         android:layout_height="wrap_content"/>
 
