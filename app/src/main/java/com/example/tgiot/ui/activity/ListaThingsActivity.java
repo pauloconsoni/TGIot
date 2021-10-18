@@ -2,12 +2,17 @@ package com.example.tgiot.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.ContextMenu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -20,6 +25,9 @@ import java.util.List;
 
 
 public class ListaThingsActivity extends AppCompatActivity {
+
+    ArrayAdapter<Thing> adapter;
+    ThingDAO dao = new ThingDAO();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -41,14 +49,31 @@ public class ListaThingsActivity extends AppCompatActivity {
     }
 
     @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        menu.add("Remover");
+    }
+
+    @Override
+    public boolean onContextItemSelected(@NonNull MenuItem item) {
+
+        AdapterView.AdapterContextMenuInfo menuInfo =
+                    (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        Thing thingEscolhida = adapter.getItem(menuInfo.position);
+        adapter.remove(thingEscolhida);
+        dao.remove(thingEscolhida);
+
+        return super.onContextItemSelected(item);
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
 
-        ThingDAO dao = new ThingDAO();
-
         ListView listaThings = findViewById(R.id.activity_lista_things_listview);
         final List<Thing> things = dao.todos();
-        listaThings.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, things));
+        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, things);
+        listaThings.setAdapter((ListAdapter) adapter);
         listaThings.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
@@ -59,5 +84,17 @@ public class ListaThingsActivity extends AppCompatActivity {
                 startActivity(vaiParaMonitor);
             }
         });
+
+//        listaThings.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+//            @Override
+//            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+//                Thing thingRemovida = (Thing) parent.getItemAtPosition(position);
+//                adapter.remove(thingRemovida);
+//                dao.remove(thingRemovida);
+//                return false;
+//            }
+//        });
+
+        registerForContextMenu(listaThings);
     }
 }

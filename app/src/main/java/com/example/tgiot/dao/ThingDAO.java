@@ -16,4 +16,19 @@ public class ThingDAO {
     public List<Thing> todos() {
         return new ArrayList<>(things);
     }
+
+    public Thing buscaPorId(Thing thing){
+        for(Thing a:things){
+            if(a.getUrl()==thing.getUrl()){
+                return a;
+            }
+        }
+        return null;
+    }
+
+
+    public void remove(Thing thing){
+        Thing thingDevolvida = buscaPorId(thing);
+        things.remove(thingDevolvida);
+    }
 }
