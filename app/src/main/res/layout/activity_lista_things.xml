@@ -23,14 +23,14 @@
         android:id="@+id/activity_lista_things_fab_novo_thing"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="340dp"
+        android:layout_marginStart="290dp"
         android:layout_marginBottom="20dp"
         android:clickable="true"
+        android:focusable="true"
+        android:src="@drawable/ic_action_novo_thing"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:srcCompat="@drawable/ic_launcher_background"
-        tools:ignore="SpeakableTextPresentCheck"
-        android:src="@drawable/ic_action_novo_thing"
-        android:focusable="true" />
+        tools:ignore="SpeakableTextPresentCheck" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
